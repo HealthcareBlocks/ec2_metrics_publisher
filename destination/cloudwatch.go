@@ -63,18 +63,33 @@ func (cw *Cloudwatch) SendMessage(sys *metrics.System) error {
 		return errors.New("must set at least one metric")
 	}
 
-	metric := &cloudwatch.PutMetricDataInput{
-		MetricData: data,
-		Namespace:  aws.String("System/Linux"),
-	}
-
 	awsConfig := &aws.Config{Endpoint: aws.String(cw.URL), Region: aws.String(cw.Region)}
 	api := cloudwatch.New(session.New(), awsConfig)
-	if _, err := api.PutMetricData(metric); err != nil {
-		return err
+
+	// AWS imposed limit
+	maxNumberItemsToSend := 20
+
+	for i := 0; i < len(data); i += maxNumberItemsToSend {
+		batch := data[i:min(i+maxNumberItemsToSend, len(data))]
+
+		metric := &cloudwatch.PutMetricDataInput{
+			MetricData: batch,
+			Namespace:  aws.String("System/Linux"),
+		}
+
+		if _, err := api.PutMetricData(metric); err != nil {
+			return err
+		}
 	}
 
 	return nil
+}
+
+func min(a, b int) int {
+	if a <= b {
+		return a
+	}
+	return b
 }
 
 func (data *MetricData) add(metrics map[string]float64, instance string,
