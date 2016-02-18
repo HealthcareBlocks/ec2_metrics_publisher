@@ -8,6 +8,8 @@ package main // import "github.com/healthcareblocks/ec2_metrics_publisher"
 import (
 	"errors"
 	"flag"
+	"fmt"
+	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -30,6 +32,7 @@ var (
 	interval         = flag.Int("interval", 60, "Frequency of publishing metrics to destination(s)")
 	metricsToCollect = flag.String("metrics", "cpu,memory,volume", "Metrics to collect")
 	volumePaths      = flag.String("paths", "/", "Volume paths to calculate usage")
+	appVersion       = flag.Bool("v", false, "Prints version of this app and exits")
 
 	// Optional flags - setting these will prevent an EC2 metadata lookup (useful for testing)
 	instanceID = flag.String("instance", "", "EC2 instance ID")
@@ -52,6 +55,11 @@ func main() {
 
 func parseFlags(awsConfig *aws.Config) error {
 	flag.Parse()
+
+	if *appVersion {
+		fmt.Println(version)
+		os.Exit(0)
+	}
 
 	if *metricsDestinations == "" {
 		return errors.New("-destinations cannot be blank")

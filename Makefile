@@ -1,4 +1,4 @@
-SHELL := /bin/bash
+SHELL := /bin/bash -e
 NAMESPACE ?= healthcareblocks
 .DEFAULT_GOAL := build
 
@@ -15,7 +15,11 @@ docker:
 clean:
 	rm -fr ./bin/*
 
-push_to_docker:
+push_to_docker: tag_version
 	docker push $(NAMESPACE)/ec2_metrics_publisher
+
+tag_version:
+	version=$(shell docker run --rm healthcareblocks/ec2_metrics_publisher -v); \
+	docker tag $(NAMESPACE)/ec2_metrics_publisher $(NAMESPACE)/ec2_metrics_publisher:$$version
 
 .PHONY: build build_all docker clean push_to_docker
