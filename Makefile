@@ -16,7 +16,9 @@ clean:
 	rm -fr ./bin/*
 
 push_to_docker: tag_version
-	docker push $(NAMESPACE)/ec2_metrics_publisher
+	version=$(shell docker run --rm healthcareblocks/ec2_metrics_publisher -v); \
+	docker push $(NAMESPACE)/ec2_metrics_publisher:latest; \
+	docker push $(NAMESPACE)/ec2_metrics_publisher:$$version;
 
 tag_version:
 	version=$(shell docker run --rm healthcareblocks/ec2_metrics_publisher -v); \
