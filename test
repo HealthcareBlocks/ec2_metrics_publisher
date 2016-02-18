@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+test() {
+    local project_only=true
+    local verbose=""
+
+    while :
+    do
+        case "$1" in
+            all)
+                project_only=false
+                shift
+                ;;
+            -v)
+                verbose="-v"
+                shift
+                ;;
+            *)  break
+                ;;
+        esac
+    done
+
+    if $project_only; then
+        go test $verbose $(go list ./... | grep -v /vendor/)
+    else
+        go test $verbose ./...
+    fi
+}
+
+main() {
+    [[ "$TRACE" ]] && set -x
+    test "$@"
+}
+
+main "$@"
