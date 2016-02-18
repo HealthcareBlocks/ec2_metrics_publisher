@@ -127,25 +127,23 @@ func collectAndPublishStats() {
 	var memory = regexp.MustCompile(`memory(\[([\w,]+)\])?`)
 	var volume = regexp.MustCompile(`volume(\[([\w,]+)\])?`)
 
-	for _, metric := range strings.Split(*metricsToCollect, ",") {
-		if cpu.MatchString(metric) {
-			filters := strings.Split(cpu.FindStringSubmatch(metric)[2], ",")
-			err = sys.CollectCPUInfo(filters)
-		}
+	if cpu.MatchString(*metricsToCollect) {
+		filters := strings.Split(cpu.FindStringSubmatch(*metricsToCollect)[2], ",")
+		err = sys.CollectCPUInfo(filters)
+	}
 
-		if memory.MatchString(metric) {
-			filters := strings.Split(memory.FindStringSubmatch(metric)[2], ",")
-			err = sys.CollectMemoryInfo(filters)
-		}
+	if memory.MatchString(*metricsToCollect) {
+		filters := strings.Split(memory.FindStringSubmatch(*metricsToCollect)[2], ",")
+		err = sys.CollectMemoryInfo(filters)
+	}
 
-		if volume.MatchString(metric) {
-			filters := strings.Split(volume.FindStringSubmatch(metric)[2], ",")
-			err = sys.CollectVolumesInfo(*volumePaths, filters)
-		}
+	if volume.MatchString(*metricsToCollect) {
+		filters := strings.Split(volume.FindStringSubmatch(*metricsToCollect)[2], ",")
+		err = sys.CollectVolumesInfo(*volumePaths, filters)
+	}
 
-		if err != nil {
-			log.Fatal(err.Error())
-		}
+	if err != nil {
+		log.Fatal(err.Error())
 	}
 
 	for _, item := range destinations {
