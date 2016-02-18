@@ -6,7 +6,7 @@ build: clean
 	docker run --rm -it -v $(PWD):/src healthcareblocks/gobuild -o linux -a amd64
 
 build_all: clean
-	docker run --rm -it -v $(PWD):/src healthcareblocks/gobuild
+	docker run --rm -it -v $(PWD):/src healthcareblocks/gobuild -o linux
 
 docker:
 	docker build -t $(NAMESPACE)/ec2_metrics_publisher .
