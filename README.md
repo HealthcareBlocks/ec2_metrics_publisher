@@ -16,7 +16,7 @@ Publish All Metrics to CloudWatch and Slack every 5 minutes:
 ec2_metrics_publisher -destinations=cloudwatch,slack -interval=300 -slack-hook=https://hooks.slack.com/etc...
 ```
 
-Publish a Specific Metric to Specific Channels:
+Publish a Specific Metric to Specific Services:
 ```
 ec2_metrics_publisher -destinations=cloudwatch -metrics=memory,volume
 ec2_metrics_publisher -destinations=slack -metrics=cpu -slack-hook=https://hooks.slack.com/etc...
