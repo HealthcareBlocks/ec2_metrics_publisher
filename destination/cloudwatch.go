@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -78,6 +79,7 @@ func (cw *Cloudwatch) SendMessage(sys *metrics.System) error {
 		}
 
 		if _, err := api.PutMetricData(metric); err != nil {
+			log.Info(metric)
 			return err
 		}
 	}
