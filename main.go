@@ -14,9 +14,9 @@ import (
 	"strings"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/healthcareblocks/ec2_metrics_publisher/destination"
-	"github.com/healthcareblocks/ec2_metrics_publisher/logger"
 	"github.com/healthcareblocks/ec2_metrics_publisher/metadata"
 	"github.com/healthcareblocks/ec2_metrics_publisher/metrics"
 )
@@ -38,12 +38,18 @@ var (
 	instanceID = flag.String("instance", "", "EC2 instance ID")
 	region     = flag.String("region", "", "EC2 region of this instance")
 
-	// Logrus logging object
-	log = logger.NewLogger()
-
 	// Used for registering active destinations for publishing metrics
 	destinations []destination.Service
 )
+
+func init() {
+	// log output in JSON formatt
+	log.SetFormatter(&log.JSONFormatter{})
+
+	log.WithFields(log.Fields{
+		"context": "ec2_metrics_publisher",
+	})
+}
 
 func main() {
 	if err := parseFlags(nil); err != nil {
