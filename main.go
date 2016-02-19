@@ -45,10 +45,6 @@ var (
 func init() {
 	// log output in JSON formatt
 	log.SetFormatter(&log.JSONFormatter{})
-
-	log.WithFields(log.Fields{
-		"context": "ec2_metrics_publisher",
-	})
 }
 
 func main() {
