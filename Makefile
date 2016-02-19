@@ -24,4 +24,4 @@ tag_version:
 	version=$(shell docker run --rm healthcareblocks/ec2_metrics_publisher -v); \
 	docker tag $(NAMESPACE)/ec2_metrics_publisher $(NAMESPACE)/ec2_metrics_publisher:$$version
 
-.PHONY: build build_all docker clean push_to_docker
+.PHONY: build build_all docker clean push_to_docker tag_version
