@@ -22,8 +22,8 @@ func TestGetMachineRetrievesEC2Metadata(t *testing.T) {
 	server := testutils.EC2MetadataResponseStub()
 	defer server.Close()
 
-	machine := &Machine{}
-	err := machine.LoadFromMetadata(&aws.Config{Endpoint: aws.String(server.URL + "/latest")})
+	machine := NewMachine(&aws.Config{Endpoint: aws.String(server.URL + "/latest")})
+	err := machine.LoadFromMetadata()
 	assert.NoError(t, err)
 	assert.Equal(t, "i-12345", machine.Instance)
 	assert.Equal(t, "us-west-2", machine.Region)
@@ -33,7 +33,23 @@ func TestGetMachineReturnsErrorOutsideOfEC2(t *testing.T) {
 	server := testutils.InvalidEC2MetadataResponseStub()
 	defer server.Close()
 
-	machine := &Machine{}
-	err := machine.LoadFromMetadata(&aws.Config{Endpoint: aws.String(server.URL + "/latest")})
+	machine := NewMachine(&aws.Config{Endpoint: aws.String(server.URL + "/latest")})
+	err := machine.LoadFromMetadata()
 	assert.Error(t, err)
+}
+
+func TestIsEC2(t *testing.T) {
+	server := testutils.InvalidEC2MetadataResponseStub()
+	defer server.Close()
+
+	machine := NewMachine(&aws.Config{Endpoint: aws.String(server.URL + "/latest")})
+	assert.False(t, machine.IsEC2())
+}
+
+func TestWithInstance(t *testing.T) {
+	assert.Equal(t, "i-abc123", new(Machine).WithInstance("i-abc123").Instance)
+}
+
+func TestWithRegion(t *testing.T) {
+	assert.Equal(t, "us-east-1", new(Machine).WithRegion("us-east-1").Region)
 }

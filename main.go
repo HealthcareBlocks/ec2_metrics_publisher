@@ -80,9 +80,9 @@ func parseFlags(awsConfig *aws.Config) error {
 		return errors.New("-metrics contains an unrecognized item")
 	}
 
-	machine := &metadata.Machine{Instance: *instanceID, Region: *region}
+	machine := metadata.NewMachine(awsConfig).WithInstance(*instanceID).WithRegion(*region)
 	if machine.IsEmpty() {
-		if err := machine.LoadFromMetadata(awsConfig); err != nil {
+		if err := machine.LoadFromMetadata(); err != nil {
 			log.Fatal(err.Error())
 		}
 	}
