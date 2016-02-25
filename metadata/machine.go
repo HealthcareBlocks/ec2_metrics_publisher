@@ -2,6 +2,9 @@
 package metadata
 
 import (
+	"io/ioutil"
+	"strings"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -33,11 +36,17 @@ func (machine *Machine) IsEmpty() bool {
 
 // IsEC2 returns true if this instance is represents an EC2 machine
 func (machine *Machine) IsEC2() bool {
-	if err := machine.LoadFromMetadata(); err != nil {
-		return false
+	// Linux only
+	contents, err := ioutil.ReadFile("/sys/hypervisor/uuid")
+	if err != nil {
+		// All others
+		if err = machine.LoadFromMetadata(); err != nil {
+			return false
+		}
+		return true
 	}
 
-	return true
+	return strings.Contains(string(contents), "ec2")
 }
 
 // LoadFromMetadata reloads a Machine struct with EC2 metadata
