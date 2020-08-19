@@ -17,6 +17,8 @@ type Collectable interface {
 	Collect(filters string) error
 }
 
+const metricsNotFound = "no metrics were found, check your filters"
+
 // CollectCPUInfo collects and populates CPU objects
 func (sys *System) CollectCPUInfo(filters []string) error {
 	cpuUsage := NewCPUUsageWithDefaultLookup()
@@ -24,7 +26,7 @@ func (sys *System) CollectCPUInfo(filters []string) error {
 		return err
 	}
 	if len(cpuUsage.Metrics) == 0 {
-		return errors.New("No metrics were found. Check your filters.")
+		return errors.New(metricsNotFound)
 	}
 	sys.CPU = *cpuUsage
 	return nil
@@ -37,7 +39,7 @@ func (sys *System) CollectMemoryInfo(filters []string) error {
 		return err
 	}
 	if len(memoryInfo.Metrics) == 0 {
-		return errors.New("No metrics were found. Check your filters.")
+		return errors.New(metricsNotFound)
 	}
 	sys.Memory = *memoryInfo
 	return nil
@@ -51,7 +53,7 @@ func (sys *System) CollectVolumesInfo(volumePaths string, filters []string) erro
 			return err
 		}
 		if len(vol.Metrics) == 0 {
-			return errors.New("No metrics were found. Check your filters.")
+			return errors.New(metricsNotFound)
 		}
 		sys.Volumes = append(sys.Volumes, *vol)
 	}
