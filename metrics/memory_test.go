@@ -1,7 +1,6 @@
 package metrics
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,8 +12,7 @@ func TestMemoryInfoCollectRequiresLookupPath(t *testing.T) {
 }
 
 func TestMemoryInfoCollectUpdatesStats(t *testing.T) {
-	curDir, _ := os.Getwd()
-	fakeMemFile := curDir + "/../_testutils/fake_proc_meminfo"
+	fakeMemFile := "../testdata/fake_proc_meminfo"
 	mem := MemoryInfo{LookupPath: fakeMemFile}
 	err := mem.Collect(nil)
 
@@ -32,8 +30,7 @@ func TestMemoryInfoCollectUpdatesStats(t *testing.T) {
 }
 
 func TestMemoryInfoCollectWithFilters(t *testing.T) {
-	curDir, _ := os.Getwd()
-	fakeMemFile := curDir + "/../_testutils/fake_proc_meminfo"
+	fakeMemFile := "../testdata/fake_proc_meminfo"
 	mem := MemoryInfo{LookupPath: fakeMemFile}
 	err := mem.Collect([]string{"Used", "SwapUsed"})
 
@@ -46,8 +43,7 @@ func TestMemoryInfoCollectWithFilters(t *testing.T) {
 }
 
 func TestMemoryInfoCollectWithEmptyStringFilter(t *testing.T) {
-	curDir, _ := os.Getwd()
-	fakeMemFile := curDir + "/../_testutils/fake_proc_meminfo"
+	fakeMemFile := "../testdata/fake_proc_meminfo"
 	mem := MemoryInfo{LookupPath: fakeMemFile}
 	err := mem.Collect([]string{""})
 
@@ -56,8 +52,7 @@ func TestMemoryInfoCollectWithEmptyStringFilter(t *testing.T) {
 }
 
 func TestMemoryInfoCollectWithBadFilter(t *testing.T) {
-	curDir, _ := os.Getwd()
-	fakeMemFile := curDir + "/../_testutils/fake_proc_meminfo"
+	fakeMemFile := "../testdata/fake_proc_meminfo"
 	mem := MemoryInfo{LookupPath: fakeMemFile}
 	err := mem.Collect([]string{"Foo"})
 

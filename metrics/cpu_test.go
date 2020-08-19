@@ -1,7 +1,6 @@
 package metrics
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,8 +12,7 @@ func TestCPUUsageCollectRequiresLookupPath(t *testing.T) {
 }
 
 func TestCPUUsageCollectUpdatesStats(t *testing.T) {
-	curDir, _ := os.Getwd()
-	fakeStatsFile := curDir + "/../_testutils/fake_proc_stat"
+	fakeStatsFile := "../testdata/fake_proc_stat"
 	cpu := CPUUsage{LookupPath: fakeStatsFile}
 	err := cpu.Collect(nil)
 
@@ -25,8 +23,7 @@ func TestCPUUsageCollectUpdatesStats(t *testing.T) {
 }
 
 func TestCPUUsageCollectWithFilters(t *testing.T) {
-	curDir, _ := os.Getwd()
-	fakeStatsFile := curDir + "/../_testutils/fake_proc_stat"
+	fakeStatsFile := "../testdata/fake_proc_stat"
 	cpu := CPUUsage{LookupPath: fakeStatsFile}
 	err := cpu.Collect([]string{"cpu1"})
 
@@ -38,8 +35,7 @@ func TestCPUUsageCollectWithFilters(t *testing.T) {
 }
 
 func TestCPUUsageCollectWithEmptyStringFilter(t *testing.T) {
-	curDir, _ := os.Getwd()
-	fakeStatsFile := curDir + "/../_testutils/fake_proc_stat"
+	fakeStatsFile := "../testdata/fake_proc_stat"
 	cpu := CPUUsage{LookupPath: fakeStatsFile}
 	err := cpu.Collect([]string{""})
 
@@ -48,8 +44,7 @@ func TestCPUUsageCollectWithEmptyStringFilter(t *testing.T) {
 }
 
 func TestCPUUsageCollectWithBadFilter(t *testing.T) {
-	curDir, _ := os.Getwd()
-	fakeStatsFile := curDir + "/../_testutils/fake_proc_stat"
+	fakeStatsFile := "../testdata/fake_proc_stat"
 	cpu := CPUUsage{LookupPath: fakeStatsFile}
 	err := cpu.Collect([]string{"Foo"})
 
