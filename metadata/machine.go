@@ -51,7 +51,8 @@ func (machine *Machine) IsEC2() bool {
 
 // LoadFromMetadata reloads a Machine struct with EC2 metadata
 func (machine *Machine) LoadFromMetadata() error {
-	svc := ec2metadata.New(session.New(), machine.awsConfig)
+	sess := session.Must(session.NewSession())
+	svc := ec2metadata.New(sess, machine.awsConfig)
 
 	instance, err := svc.GetMetadata("instance-id")
 	if err != nil {

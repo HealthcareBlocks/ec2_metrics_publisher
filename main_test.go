@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/healthcareblocks/ec2_metrics_publisher/testutils"
+	"github.com/healthcareblocks/ec2_metrics_publisher/_testutils"
 	"github.com/stretchr/testify/assert"
 )
 

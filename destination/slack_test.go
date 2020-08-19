@@ -5,9 +5,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/healthcareblocks/ec2_metrics_publisher/_testutils"
 	"github.com/healthcareblocks/ec2_metrics_publisher/metadata"
 	"github.com/healthcareblocks/ec2_metrics_publisher/metrics"
-	"github.com/healthcareblocks/ec2_metrics_publisher/testutils"
 	"github.com/stretchr/testify/assert"
 )
 
