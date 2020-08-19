@@ -5,15 +5,35 @@ import (
 	"net/http/httptest"
 )
 
+const instanceIdentityDocument = `{
+  "devpayProductCodes" : null,
+  "marketplaceProductCodes" : [ "1abc2defghijklm3nopqrs4tu" ], 
+  "availabilityZone" : "us-west-2a",
+  "privateIp" : "10.158.112.84",
+  "version" : "2010-08-31",
+  "region" : "us-west-2",
+  "instanceId" : "i-1234567890abcdef0",
+  "billingProducts" : null,
+  "instanceType" : "t2.micro",
+  "accountId" : "123456789012",
+  "pendingTime" : "2015-11-19T16:32:11Z",
+  "imageId" : "ami-5fb8c835",
+  "kernelId" : "aki-919dcaf8",
+  "ramdiskId" : null,
+  "architecture" : "x86_64"
+}`
+
 // EC2MetadataResponseStub fakes an EC2 metadata response
 func EC2MetadataResponseStub() *httptest.Server {
 	var resp string
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.RequestURI {
+		case "/latest/api/token":
+			resp = "abcdefg"
+		case "/latest/dynamic/instance-identity/document":
+			resp = instanceIdentityDocument
 		case "/latest/meta-data/instance-id":
 			resp = "i-12345"
-		case "/latest/meta-data/placement/availability-zone":
-			resp = "us-west-2a"
 		default:
 			http.Error(w, "not found", http.StatusNotFound)
 			return
@@ -23,7 +43,6 @@ func EC2MetadataResponseStub() *httptest.Server {
 }
 
 // InvalidEC2MetadataResponseStub represents a response from a non-EC2 environment
-// see https://github.com/aws/aws-sdk-go/blob/368825ea31d6fde9a070070e1f8e2762f72140ca/aws/ec2metadata/api_test.go#L86
 func InvalidEC2MetadataResponseStub() *httptest.Server {
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "RequestError: send request failed", http.StatusBadRequest)
