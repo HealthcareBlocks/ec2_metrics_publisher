@@ -49,7 +49,7 @@ func (m *MemoryInfo) Collect(filters []string) error {
 
 		switch key {
 		// we only care about a subset of all the memory metrics
-		case "MemFree", "MemTotal", "SwapFree", "SwapTotal":
+		case "MemFree", "MemAvailable", "MemTotal", "SwapFree", "SwapTotal":
 			v, err := stringToFloat(value)
 			if err != nil {
 				return err
