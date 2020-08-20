@@ -1,5 +1,5 @@
 SHELL := /bin/bash -e
-.DEFAULT_GOAL := build
+.DEFAULT_GOAL := build_native
 
 build_native:
 	go build -o bin/ec2_metrics_publisher
