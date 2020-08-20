@@ -17,8 +17,9 @@ func TestMemoryInfoCollectUpdatesStats(t *testing.T) {
 	err := mem.Collect(nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, mem.Metrics, 8)
+	assert.Len(t, mem.Metrics, 9)
 	assert.NotEmpty(t, mem.Metrics["MemFree"])
+	assert.NotEmpty(t, mem.Metrics["MemAvailable"])
 	assert.NotEmpty(t, mem.Metrics["MemTotal"])
 	assert.NotEmpty(t, mem.Metrics["Used"])
 	assert.NotEmpty(t, mem.Metrics["UsedPercent"])
@@ -48,7 +49,7 @@ func TestMemoryInfoCollectWithEmptyStringFilter(t *testing.T) {
 	err := mem.Collect([]string{""})
 
 	assert.NoError(t, err)
-	assert.Len(t, mem.Metrics, 8)
+	assert.Len(t, mem.Metrics, 9)
 }
 
 func TestMemoryInfoCollectWithBadFilter(t *testing.T) {
