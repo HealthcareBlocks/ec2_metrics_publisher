@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/healthcareblocks/ec2_metrics_publisher/_testutils"
 	"github.com/healthcareblocks/ec2_metrics_publisher/metadata"
 	"github.com/healthcareblocks/ec2_metrics_publisher/metrics"
@@ -53,5 +54,6 @@ func getCloudwatchInstance() *Cloudwatch {
 	cw := &Cloudwatch{}
 	cw.SetMachine(&metadata.Machine{Instance: "i-abc123", Region: "us-west-2"})
 	cw.SetEndpoint(&ServiceEndpoint{cloudwatchServer.URL})
+	cw.CredentialsOverride = credentials.AnonymousCredentials
 	return cw
 }

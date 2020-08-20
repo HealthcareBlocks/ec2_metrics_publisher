@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/healthcareblocks/ec2_metrics_publisher/metadata"
@@ -17,6 +17,7 @@ import (
 type Cloudwatch struct {
 	*metadata.Machine
 	*ServiceEndpoint
+	CredentialsOverride *credentials.Credentials
 }
 
 // MetricData is a slice of cloudwatch.MetricDatum
@@ -65,6 +66,10 @@ func (cw *Cloudwatch) SendMessage(sys *metrics.System) error {
 	}
 
 	awsConfig := &aws.Config{Endpoint: aws.String(cw.URL), Region: aws.String(cw.Region)}
+	if cw.CredentialsOverride != nil {
+		awsConfig.Credentials = cw.CredentialsOverride
+	}
+
 	api := cloudwatch.New(session.New(), awsConfig)
 
 	// AWS imposed limit
@@ -79,7 +84,6 @@ func (cw *Cloudwatch) SendMessage(sys *metrics.System) error {
 		}
 
 		if _, err := api.PutMetricData(metric); err != nil {
-			log.Info(metric)
 			return err
 		}
 	}
