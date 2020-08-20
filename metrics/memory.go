@@ -58,7 +58,7 @@ func (m *MemoryInfo) Collect(filters []string) error {
 		}
 	}
 
-	m.Metrics["Used"] = m.Metrics["MemTotal"] - m.Metrics["MemFree"]
+	m.Metrics["Used"] = m.Metrics["MemTotal"] - m.Metrics["MemAvailable"]
 	m.Metrics["UsedPercent"] = mathlib.RoundWithPrecision((m.Metrics["Used"]/m.Metrics["MemTotal"])*100, 5)
 	m.Metrics["SwapUsed"] = m.Metrics["SwapTotal"] - m.Metrics["SwapFree"]
 
